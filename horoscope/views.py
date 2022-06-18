@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
 from django.template.loader import render_to_string
 
+
 # Create your views here.
 
 class Zodiac:
@@ -24,7 +25,8 @@ libra = Zodiac('libra', 'Весы - седьмой знак зодиака, пл
 scorpio = Zodiac('scorpio', 'Скорпион - восьмой знак зодиака, планета Марс (с 24 октября по 22 ноября).', elements[3])
 sagittarius = Zodiac('sagittarius', 'Стрелец - девятый знак зодиака, планета Юпитер (с 23 ноября по 22 декабря).',
                      elements[0])
-capricorn = Zodiac('capricorn', 'Козерог - десятый знак зодиака, планета Сатурн (с 23 декабря по 20 января).', elements[1])
+capricorn = Zodiac('capricorn', 'Козерог - десятый знак зодиака, планета Сатурн (с 23 декабря по 20 января).',
+                   elements[1])
 aquarius = Zodiac('aquarius', 'Водолей - одиннадцатый знак зодиака, планеты Уран и Сатурн (с 21 января по 19 февраля).',
                   elements[2])
 pisces = Zodiac('pisces', 'Рыбы - двенадцатый знак зодиака, планеты Юпитер (с 20 февраля по 20 марта).', elements[3])
@@ -49,21 +51,24 @@ signs = [aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius,
 
 
 def index(request):
-    li_path = ''
+    # li_path = ''
+    # for sign in signs:
+    #     href_path = reverse('horoscope-name', args=[sign.zodiac_name])
+    #     li_path += f'<li><a href={href_path}>{sign.zodiac_name.title()}</a></li>'
+    # # zodiac_list = f'<ol>{li_path}</ol>'
+    # return HttpResponse(zodiac_list)
+    data = {
+        'signs': signs,
+    }
+    return render(request, 'horoscope/index.html', context=data)
+
+
+def zodiacs(request, sign_zodiac: str):
+    data = {'sign': sign_zodiac}
     for sign in signs:
-        href_path = reverse('horoscope-name', args=[sign.zodiac_name])
-        li_path += f'<li><a href={href_path}>{sign.zodiac_name.title()}</a></li>'
-    zodiac_list = f'<ol>{li_path}</ol>'
-    return HttpResponse(zodiac_list)
-
-
-def zodiacs(request, sign_zodiac):
-    #response = render_to_string('horoscope/info_zodiac.html')
-    #for sign in signs:
-    #    if sign_zodiac == sign.zodiac_name:
-    return render(request, 'horoscope/info_zodiac.html')
-            #return HttpResponse(f'<h2>{sign.zodiac_description}</h2>')
-    #return HttpResponseNotFound(f'Знака зодиака {sign_zodiac} не существует.')
+        if sign_zodiac == sign.zodiac_name:
+            data['zodiac_description'] = sign.zodiac_description
+    return render(request, 'horoscope/info_zodiac.html', context=data)
 
 
 def zodiacs_by_num(request, sign_zodiac):
