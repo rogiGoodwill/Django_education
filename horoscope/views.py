@@ -95,3 +95,7 @@ def type_zodiacs(request, element):
         zodiac_list = f'<ul>{li}</ul>'
         return HttpResponse(zodiac_list)
     return HttpResponseNotFound(f'Не существующая стихия - {element}')
+
+
+def fake(request):
+    return render(request, 'horoscope/fake.html')
